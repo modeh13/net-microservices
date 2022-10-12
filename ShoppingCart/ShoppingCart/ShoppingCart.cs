@@ -1,3 +1,5 @@
+using ShoppingCart.EventFeed.Interfaces;
+
 namespace ShoppingCart.ShoppingCart;
 
 public class ShoppingCart
@@ -9,15 +11,21 @@ public class ShoppingCart
 
     public ShoppingCart(int userId) => UserId = userId;
 
-    public void AddItems(IEnumerable<ShoppingCartItem> shoppingCartItems)
+    public void AddItems(IEnumerable<ShoppingCartItem> shoppingCartItems, IEventStore eventStore)
     {
-        foreach (var shoppingCartItem in shoppingCartItems)
+        foreach (var shoppingCartItem in shoppingCartItems.Where(item => _items.Add(item)))
         {
-            _items.Add(shoppingCartItem);
+            eventStore.Raise("ShoppingCartItemAdded", new { UserId, Item = shoppingCartItem});
         }
     }
 
-    public void RemoveItems(int[] productCatalogIds) => _items.RemoveWhere(item => productCatalogIds.Contains(item.ProductCatalogId));
+    public void RemoveItems(int[] productCatalogIds, IEventStore eventStore)
+    {
+        foreach (var shoppingCartItem in _items.Where(item => productCatalogIds.Contains(item.ProductCatalogId) && _items.Remove(item)))
+        {
+            eventStore.Raise("ShoppingCardItemDeleted", new { UserId, Item = shoppingCartItem});
+        }
+    } 
 }
 
 public record ShoppingCartItem(int ProductCatalogId, string ProductName, string Description, Money money)
