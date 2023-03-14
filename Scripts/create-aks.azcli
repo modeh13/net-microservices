@@ -1,0 +1,21 @@
+$ResourceGroupName = "RG-NetMicroservices"
+$ContainerRegistryName = "grcontainerreg"
+$AKSClusterName = "AKS-Cluster-NetMicroservices"
+
+# Create Resource Group
+az group create --name $ResourceGroupName --location eastus
+
+# Create a Container Registry
+az acr create --resource-group $ResourceGroupName --name $ContainerRegistryName --sku Basic
+
+# Create a Azure Kubernetes Services Cluster
+az aks create --resource-group $ResourceGroupName --name $AKSClusterName --node-count 1 --enable-addons monitoring --generate-ssh-keys --attach-acr $ContainerRegistryName
+
+# Get Kube Configuration file from Azure
+az aks get-credentials --resource-group $ResourceGroupName --name $AKSClusterName
+
+# Delete Resource Group
+az group delete --name $ResourceGroupName --yes --no-wait
+
+# Start Kubernetes Dashboard
+az aks browse --resource-group $ResourceGroupName --name $AKSClusterName

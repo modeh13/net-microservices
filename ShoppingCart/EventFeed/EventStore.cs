@@ -15,7 +15,7 @@ public class EventStore : IEventStore
         
         public long NextSequenceNumber()
         {
-            return Events.Keys.Max() + 1;
+            return Events.Keys.DefaultIfEmpty().Max() + 1;
         }
 
         public void Add(Event @event)

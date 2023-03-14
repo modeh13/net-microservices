@@ -1,0 +1,13 @@
+# Login Azure by service Principal
+# Tenant ID: c75dcd52-f798-4d11-8ecf-9cf829a6ba87
+# App ID: 8bddd8be-ba6f-4532-afdc-198fac6f1566
+# Secret Value: U7f8Q~z.4875U2fWKkW3i_TKQI~3P4IIUsTEvaQF
+
+# Login Azure by service Principal
+$appID = "8bddd8be-ba6f-4532-afdc-198fac6f1566"
+$secretValue = "U7f8Q~z.4875U2fWKkW3i_TKQI~3P4IIUsTEvaQF"
+$tenantID = "c75dcd52-f798-4d11-8ecf-9cf829a6ba87"
+az login --service-principal --username $appID --password $secretValue --tenant $tenantID
+
+# List Azure Locations
+az account list-locations --output table
