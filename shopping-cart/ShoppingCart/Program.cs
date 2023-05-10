@@ -18,9 +18,7 @@ builder.Services.AddHttpClient<IProductCatalogClient, ProductCatalogClient>()
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-app.UseRouting();
-app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-app.MapGet("/", () => "Hello World!");
+app.MapControllers();
 
 app.Run();

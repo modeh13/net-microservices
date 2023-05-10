@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["ShoppingCart/ShoppingCart.csproj", "ShoppingCart/"]
 RUN dotnet restore "ShoppingCart/ShoppingCart.csproj"
@@ -9,9 +9,9 @@ RUN dotnet build "ShoppingCart.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "ShoppingCart.csproj" -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
 WORKDIR /app
-ENV ASPNETCORE_URLS=http://+:60737
-EXPOSE 60737
+EXPOSE 80
+EXPOSE 443
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ShoppingCart.dll"]
