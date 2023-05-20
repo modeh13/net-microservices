@@ -1,6 +1,4 @@
-using ShoppingCart.ShoppingCart;
-
-namespace ShoppingCart.Services.Interfaces;
+namespace ShoppingCart.Abstractions.Services;
 
 public interface IProductCatalogClient
 {

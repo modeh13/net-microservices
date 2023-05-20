@@ -1,6 +1,6 @@
-using ShoppingCart.EventFeed.Interfaces;
+using ShoppingCart.Abstractions.Stores;
 
-namespace ShoppingCart.EventFeed;
+namespace ShoppingCart.Stores;
 
 public class EventStore : IEventStore
 {

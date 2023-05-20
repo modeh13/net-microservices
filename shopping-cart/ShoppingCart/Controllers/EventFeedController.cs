@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ShoppingCart.EventFeed.Interfaces;
+using ShoppingCart.Abstractions.Stores;
 
-namespace ShoppingCart.EventFeed;
+namespace ShoppingCart.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

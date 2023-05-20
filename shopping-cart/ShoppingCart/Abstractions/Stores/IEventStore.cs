@@ -1,4 +1,4 @@
-namespace ShoppingCart.EventFeed.Interfaces;
+namespace ShoppingCart.Abstractions.Stores;
 
 public interface IEventStore
 {

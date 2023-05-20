@@ -82,3 +82,15 @@ docker tag shopping-cart grcontainerreg.azurecr.io/shopping-cart:1.0.0
 az acr login --name grcontainerreg
 docker push grcontainerreg.azurecr.io/shopping-cart:1.0.0
 ```
+
+## Data store
+
+Pull Microsoft SQL Server Docker image:
+```batch
+docker pull mcr.microsoft.com/mssql/server 
+``` 
+
+Run Docker container for SQL Server:
+```batch
+docker run --name ms-sql-server -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=123Test!" -p 1433:1433 -d mcr.microsoft.com/mssql/server
+``` 

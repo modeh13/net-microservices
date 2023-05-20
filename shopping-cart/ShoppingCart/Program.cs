@@ -1,8 +1,8 @@
 using Polly;
-using ShoppingCart.EventFeed;
-using ShoppingCart.EventFeed.Interfaces;
+using ShoppingCart.Abstractions.Services;
+using ShoppingCart.Abstractions.Stores;
 using ShoppingCart.Services;
-using ShoppingCart.Services.Interfaces;
+using ShoppingCart.Stores;
 
 var builder = WebApplication.CreateBuilder(args);
 

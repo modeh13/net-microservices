@@ -1,7 +1,6 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
-using ShoppingCart.Services.Interfaces;
-using ShoppingCart.ShoppingCart;
+using ShoppingCart.Abstractions.Services;
 
 namespace ShoppingCart.Services;
 
