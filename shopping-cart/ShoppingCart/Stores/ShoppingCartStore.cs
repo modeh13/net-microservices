@@ -48,7 +48,8 @@ public class ShoppingCartStore : IShoppingCartStore
             .Select(shoppingCartItem => new ShoppingCartItem(Convert.ToInt32(shoppingCartItem.ProductCatalogId), 
                 shoppingCartItem.ProductName, 
                 shoppingCartItem.ProductDescription, 
-                new Money(shoppingCartItem.Currency, Convert.ToDecimal(shoppingCartItem.Amount))));
+                new Money(shoppingCartItem.Currency, Convert.ToDecimal(shoppingCartItem.Amount))))
+            .OrderBy(shoppingCartItem => shoppingCartItem.ProductCatalogId);
         
         return new ShoppingCartModel(queryResult.First().ShoppingCartId, userId, shoppingCartItems);
     }

@@ -39,7 +39,7 @@ public class ShoppingCartController : ControllerBase
         var shoppingCart = await _shoppingCartStore.GetAsync(userId) ?? new ShoppingCartModel(userId);
 
         var shoppingCartItems = await _productCatalogClient.GetShoppingCartItemsAsync(productIds);
-        shoppingCart.AddItems(shoppingCartItems, _eventStore);
+        await shoppingCart.AddItemsAsync(shoppingCartItems, _eventStore);
         await _shoppingCartStore.SaveAsync(shoppingCart);
 
         return Ok(shoppingCart);
@@ -54,7 +54,7 @@ public class ShoppingCartController : ControllerBase
             return NotFound();
         }
 
-        shoppingCart.RemoveItems(productIds, _eventStore);
+        await shoppingCart.RemoveItemsAsync(productIds, _eventStore);
         await _shoppingCartStore.SaveAsync(shoppingCart);
 
         return Ok();

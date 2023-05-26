@@ -22,19 +22,19 @@ public class ShoppingCart
         Items = new HashSet<ShoppingCartItem>(shoppingCartItems);
     }
 
-    public void AddItems(IEnumerable<ShoppingCartItem> shoppingCartItems, IEventStore eventStore)
+    public async Task AddItemsAsync(IEnumerable<ShoppingCartItem> shoppingCartItems, IEventStore eventStore)
     {
         foreach (var shoppingCartItem in shoppingCartItems.Where(item => Items.Add(item)))
         {
-            eventStore.Raise("ShoppingCartItemAdded", new { UserId, Item = shoppingCartItem});
+            await eventStore.RaiseAsync("ShoppingCartItemAdded", new { UserId, Item = shoppingCartItem});
         }
     }
 
-    public void RemoveItems(int[] productCatalogIds, IEventStore eventStore)
+    public async Task RemoveItemsAsync(int[] productCatalogIds, IEventStore eventStore)
     {
         foreach (var shoppingCartItem in Items.Where(item => productCatalogIds.Contains(item.ProductCatalogId) && Items.Remove(item)))
         {
-            eventStore.Raise("ShoppingCardItemDeleted", new { UserId, Item = shoppingCartItem});
+            await eventStore.RaiseAsync("ShoppingCardItemDeleted", new { UserId, Item = shoppingCartItem});
         }
     } 
 }

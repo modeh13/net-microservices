@@ -1,3 +1,9 @@
 namespace ShoppingCart.Models;
 
-public record Event(long SequenceNumber, DateTimeOffset OccurredAt, string Name, object Content);
+public record Event
+{
+    public long SequenceNumber { get; init; }
+    public string? Name { get; init; } 
+    public object? Content { get; init; }
+    public DateTimeOffset OccurredAt { get; init; }
+}

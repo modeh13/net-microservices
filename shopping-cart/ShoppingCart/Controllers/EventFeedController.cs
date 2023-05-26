@@ -15,8 +15,10 @@ public class EventFeedController : ControllerBase
     }
 
     [HttpGet]
-    public Event[] Get([FromQuery] long start, [FromQuery] long end = long.MaxValue)
+    public async Task<ActionResult<Event[]>> GetAsync([FromQuery] long start, [FromQuery] long end = long.MaxValue)
     {
-        return _eventStore.GetEvents(start, end).ToArray();
+        var events = await _eventStore.GetEventsAsync(start, end);
+        
+        return Ok(events.ToArray());
     }
 }

@@ -94,3 +94,17 @@ Run Docker container for SQL Server:
 ```batch
 docker run --name ms-sql-server -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=123Test!" -p 1433:1433 -d mcr.microsoft.com/mssql/server
 ``` 
+
+## Event Store 
+
+Pull Docker Image for EventStoreDB
+```batch
+docker pull eventstore/eventstore
+```
+
+Create Docker Container
+```batch
+docker run --name eventstore-node -it -p 2113:2113 -p 1113:1113 --rm eventstore/eventstore:latest --run-projections All --enable-external-tcp --enable-atom-pub-over-http --insecure
+```
+
+Check if EventStoreDB is up and running. Go to http://localhost:2113

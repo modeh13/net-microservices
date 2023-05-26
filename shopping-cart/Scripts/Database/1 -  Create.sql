@@ -45,3 +45,14 @@ IF OBJECT_ID('dbo.ShoppingCartItem') IS NULL
         CREATE INDEX ShoppingCartItem_ShoppingCardId
         ON dbo.ShoppingCartItem (ShoppingCartId)
     END
+
+IF OBJECT_ID('dbo.EventStore') IS NULL
+    BEGIN
+        CREATE TABLE dbo.EventStore
+        (
+            Id          INT IDENTITY (1, 1) PRIMARY KEY,
+            Name        NVARCHAR(50) NOT NULL,
+            OccurredAt  DATETIMEOFFSET NOT NULL,
+            Content     NVARCHAR(MAX)
+        )
+    END

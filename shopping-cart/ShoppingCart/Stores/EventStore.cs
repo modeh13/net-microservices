@@ -1,9 +1,14 @@
+using System.Data.SqlClient;
+using System.Text.Json;
+using Dapper;
 using ShoppingCart.Abstractions.Stores;
 
 namespace ShoppingCart.Stores;
 
 public class EventStore : IEventStore
 {
+    private readonly IConfiguration _configuration;
+
     private sealed class EventStoreDatabase
     {
         private readonly IDictionary<long, Event> Events;
@@ -33,15 +38,42 @@ public class EventStore : IEventStore
 
     private static readonly EventStoreDatabase Database = new();
 
-    public IEnumerable<Event> GetEvents(long firstEventSequenceNumber, long lastEventSequenceNumber)
+    private const string SelectEventsSql =
+        @"SELECT Id AS SequenceNumber, Name, OccurredAt, Content FROM dbo.EventStore WHERE Id >= @Start AND Id <= @End";
+
+    private const string InsertEventSql = @"INSERT INTO dbo.EventStore (Name, OccurredAt, Content) VALUES (@Name, @OccurredAt, @Content)";
+    
+    public EventStore(IConfiguration configuration)
     {
-        return Database.GetEvents(firstEventSequenceNumber, lastEventSequenceNumber);
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
-    public void Raise(string eventName, object content)
+    private string? GetConnectionString()
     {
-        var sequenceNumber = Database.NextSequenceNumber();
-        
-        Database.Add(new Event(sequenceNumber, DateTimeOffset.UtcNow, eventName, content));
+        return _configuration.GetConnectionString("ShoppingCartDb");
+    }
+
+    public async Task<IEnumerable<Event>> GetEventsAsync(long firstEventSequenceNumber, long lastEventSequenceNumber)
+    {
+        await using var sqlConnection = new SqlConnection(GetConnectionString());
+        var events = await sqlConnection.QueryAsync<Event>(SelectEventsSql, new
+        {
+            Start = firstEventSequenceNumber,
+            End = lastEventSequenceNumber
+        });
+
+        return events;
+    }
+
+    public async Task RaiseAsync(string eventName, object content)
+    {
+        await using var sqlConnection = new SqlConnection(GetConnectionString());
+        _ = await sqlConnection.ExecuteAsync(InsertEventSql, new
+        {
+            Name = eventName,
+            OccurredAt = DateTimeOffset.UtcNow,
+            Content = JsonSerializer.Serialize(content)
+        });
+
     }
 }

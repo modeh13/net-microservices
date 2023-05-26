@@ -2,6 +2,6 @@ namespace ShoppingCart.Abstractions.Stores;
 
 public interface IEventStore
 {
-    IEnumerable<Event> GetEvents(long firstEventSequenceNumber, long lastEventSequenceNumber);
-    void Raise(string eventName, object content);
+    Task<IEnumerable<Event>> GetEventsAsync(long firstEventSequenceNumber, long lastEventSequenceNumber);
+    Task RaiseAsync(string eventName, object content);
 }
